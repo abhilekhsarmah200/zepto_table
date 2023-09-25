@@ -13,6 +13,16 @@ const headJson = [
     columnId: 'state',
     columnName: 'State',
   },
+  {
+    columnId: 'email',
+    columnName: 'Email',
+    responsePath: 'userEmail.email',
+  },
+  {
+    columnId: 'phone',
+    columnName: 'Ph. No.',
+    responsePath: 'userContact.phone',
+  },
 ];
 
 const bodyJson = [
@@ -20,30 +30,49 @@ const bodyJson = [
     name: 'Abhilekh',
     add: 'Peoli Nagar',
     state: 'Assam',
+    userContact: {
+      phone: '848765778',
+    },
+    userEmail: {
+      email: 'abh@ss.com',
+    },
   },
-  { name: 'Abhi', add: 'Banglore', state: 'Banglore' },
-  { name: 'Abhishek', add: 'Pune' },
-  { name: 'Daniel', add: 'Goa', state: 'Goa' },
-  { name: 'Bob', add: 'Dibrugarh', state: 'Assam' },
-  { name: 'Bisnuai', add: 'Khowang', state: 'Assam' },
+  {
+    name: 'Abhi',
+    add: 'Banglore',
+    state: 'Banglore',
+    userContact: null,
+    userEmail: null,
+  },
+  { name: 'Abhishek', add: 'Pune', userContact: null, userEmail: null },
+  {
+    name: 'Daniel',
+    add: 'Goa',
+    state: 'Goa',
+    userContact: null,
+    userEmail: null,
+  },
+  {
+    name: 'Bob',
+    add: 'Dibrugarh',
+    state: 'Assam',
+    userContact: {
+      phone: '3434343434',
+    },
+    userEmail: {
+      email: 'der@ss.com',
+    },
+  },
+  {
+    name: 'Bisnuai',
+    add: 'Khowang',
+    state: 'Assam',
+    userContact: null,
+    userEmail: null,
+  },
 ];
 
 export default function Table() {
-  // const tableProperties = [
-  //   {
-  //     Name: 'Abhilekh',
-  //     Address: 'Peoli Nagar',
-  //     State: 'Assam',
-  //   },
-  //   { Name: 'Abhi', Address: 'Banglore', State: 'Banglore' },
-  //   { Name: 'Abhishek', Address: 'Pune' },
-  //   { Name: 'Daniel', Address: 'Goa', State: 'Goa' },
-  //   { Name: 'Bob', Address: 'Dibrugarh', State: 'Assam' },
-  //   { Name: 'Bisnuai', Address: 'Khowang', State: 'Assam' },
-  // ];
-
-  const header = Object.keys(headJson[0]);
-
   // get table heading data
   const ThData = () => {
     return (
@@ -60,6 +89,10 @@ export default function Table() {
     );
   };
 
+  const pathObject = Object.values(headJson?.map((item) => item?.responsePath));
+
+  console.log({ ...pathObject });
+
   // get table row data
   const tdData = () => {
     return bodyJson.map((body, index) => (
@@ -69,7 +102,11 @@ export default function Table() {
             className='text-center border-collapse border rounded-xl border-slate-500'
             key={header.columnId}
           >
-            {body[header.columnId]}
+            {header?.responsePath
+              ? header.responsePath
+                  .split('.')
+                  .reduce((obj, key) => (obj ? obj[key] : ''), body)
+              : body[header.columnId]}
           </td>
         ))}
       </tr>
